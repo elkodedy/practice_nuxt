@@ -1,14 +1,11 @@
 <template>
   <v-row no-gutters align="center" align-content="center" justify="center">
     <v-col cols="12" sm="4" md="4" lg="4" xl="3" align-self="center">
-
-      <v-card class="logo py-4 d-flex justify-center">
-        <NuxtLogo />
-        <VuetifyLogo />
-      </v-card>
-
       <v-form v-if="!login_state" @keyup.native.enter="login">
         <v-card>
+          <div class="logo py-8 mt-16 d-flex justify-center">
+            <ImipLogo />
+          </div>
           <v-card-title>
             <v-card-text>
               <v-flex xs12 class="mb-4">
@@ -44,31 +41,38 @@
                 ></v-text-field>
               </v-flex>
             </v-card-text>
-            <v-card-actions>
-              <v-flex class="text-right" xs12>
-                <v-spacer></v-spacer>
-                <v-btn small text color="red" @click="clear">clear</v-btn>
-                <v-btn color="success" small :loading="loading" @click="login">
+            <v-card-text class="">
+              <v-flex class="text-center" xs12>
+                <v-btn
+                  text
+                  class="my-btn-logout grey mx-1"
+                  color="white"
+                  @click="clear"
+                  >clear</v-btn
+                >
+                <v-btn
+                  text
+                  class="my-btn light-green mx-1"
+                  color="white"
+                  @click="login"
+                >
                   Login
-                  <v-icon right dark> mdi-login-variant </v-icon>
+                  <!-- <v-icon right dark> mdi-login-variant </v-icon> -->
                 </v-btn>
               </v-flex>
-            </v-card-actions>
+            </v-card-text>
           </v-card-title>
         </v-card>
       </v-form>
 
       <div v-else class="py-4 d-flex justify-center">
-        <v-btn color="success" @click="logout">
+        <v-btn  class="my-btn-logout grey mx-1" @click="logout">
           Logout
-          <v-icon right dark> mdi-logout-variant </v-icon>
         </v-btn>
       </div>
-
     </v-col>
   </v-row>
 </template>
-
 
 <script>
 export default {
@@ -83,7 +87,7 @@ export default {
         password: '',
         language: 'en',
         // app_name: process.env.appName,
-        app_name: "E-FORM",
+        app_name: 'E-FORM',
       },
       show: false,
       loading: false,
@@ -98,7 +102,6 @@ export default {
 
   // object method bawaan vue, object yang dapat menyimpan fungsi2 yang dapat di gunakan di halaman
   methods: {
-
     // menggunakan plugin axios untuk mengkoneksikan vue ke api backend
     getApps() {
       this.$axios.get(`/api/apps`).then((res) => {
@@ -123,20 +126,20 @@ export default {
           this.$auth.$storage.setLocalStorage(
             'app.default_name',
             this.form.app_name
-            )
+          )
           this.$auth.$storage.setLocalStorage(
             'app.app_user',
             this.form.username
-            )
+          )
           this.$axios.get('/api/auth/roles').then((res) => {
-            console.log("login berhasil")
+            console.log('login berhasil')
             this.$swal({
               type: 'success',
               title: 'Success',
-              text: "Login Berhasil",
-            }).then(function(){
+              text: 'Login Berhasil',
+            }).then(function () {
               // location.reload();
-              window.location.href = "/";
+              window.location.href = '/'
             })
 
             //   this.$gates.setRoles(res.data)
@@ -148,16 +151,16 @@ export default {
             //     title: 'Success',
             //     text: "Login Berhasil",
             //   })
-              // window.location.href = process.env.baseRoute
-              // if (this.$auth.$state.redirect) {
-              //   // If rediect to login page from page that is required authentication (auth midleware), go that page
-              //   window.location.href = this.$auth.$state.redirect
-              // } else if (this.$route.query.service) {
-              //   window.location.href = this.$route.query.service
-              // } else {
-              //   // Otherwise, go to home page
-              //   window.location.href = process.env.baseRoute
-              // }
+            // window.location.href = process.env.baseRoute
+            // if (this.$auth.$state.redirect) {
+            //   // If rediect to login page from page that is required authentication (auth midleware), go that page
+            //   window.location.href = this.$auth.$state.redirect
+            // } else if (this.$route.query.service) {
+            //   window.location.href = this.$route.query.service
+            // } else {
+            //   // Otherwise, go to home page
+            //   window.location.href = process.env.baseRoute
+            // }
             // })
           })
           // .catch((err) => {
@@ -166,8 +169,8 @@ export default {
           // })
         })
         .catch((err) => {
-          console.log(err)
-          console.log("login gagal")
+          // console.log(err)
+          // console.log("login gagal")
           this.loading = false
           this.snackbar = true
           this.$swal({
@@ -178,7 +181,6 @@ export default {
         })
     },
 
-
     async logout() {
       await this.$auth.logout()
       this.$auth.$storage.removeLocalStorage('app.default_name')
@@ -186,13 +188,12 @@ export default {
       this.$swal({
         type: 'success',
         title: 'Success',
-        text: "Logout Berhasil",
-      }).then(function(){
-          window.location.href = "/";
+        text: 'Logout Berhasil',
+      }).then(function () {
+        window.location.href = '/'
       })
       // this.$router.push('/login')
     },
   },
-
 }
 </script>

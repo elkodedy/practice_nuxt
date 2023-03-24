@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="dialog" persistent max-width="500px">
-    <v-card>
+    <v-card class="py-10">
       <v-card-title>
         <span>Edit</span>
       </v-card-title>
@@ -32,6 +32,7 @@
                     outlined
                     dense
                     hide-details="auto"
+                    type="number"
                   ></v-text-field>
                 </v-flex>
 
@@ -42,6 +43,7 @@
                     outlined
                     dense
                     hide-details="auto"
+                    type="datetime-local"
                   ></v-text-field>
                 </v-flex>
 
@@ -52,13 +54,25 @@
                     outlined
                     dense
                     hide-details="auto"
+                    type="number"
                   ></v-text-field>
                 </v-flex>
 
                 <v-flex xs12 class="pa-2">
-                  <v-text-field
+                  <v-select
                     v-model="form.jenis_kelamin"
                     label="Jenis Kelamin"
+                    :items="['Pria', 'Wanita']"
+                    outlined
+                    dense
+                    hide-details="auto"
+                  ></v-select>
+                </v-flex>
+
+                <v-flex xs12 class="pa-2">
+                  <v-text-field
+                    v-model="form.hp"
+                    label="HP"
                     outlined
                     dense
                     hide-details="auto"
@@ -67,8 +81,8 @@
 
                 <v-flex xs12 class="pa-2">
                   <v-text-field
-                    v-model="form.hp"
-                    label="HP"
+                    v-model="form.email"
+                    label="Email"
                     outlined
                     dense
                     hide-details="auto"
@@ -89,19 +103,20 @@
           </v-layout>
         </v-form>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="red darken-1" text small @click="close()"> Close </v-btn>
-        <v-btn
-          color="green darken-1"
-          small
-          dark
-          :loading="submitLoad"
-          @click="save()"
-        >
-          Save
-        </v-btn>
-      </v-card-actions>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn text class="my-btn-logout grey mx-1" color="white" @click="close()">
+              Close
+            </v-btn>
+            <v-btn
+              text
+              class="my-btn light-green mx-1 mr-4"
+              color="white"
+              @click="save()"
+            >
+              Save
+            </v-btn>
+          </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -152,6 +167,7 @@ export default {
         ktp: null,
         jenis_kelamin: null,
         hp: null,
+        email: null,
         alamat: null,
       },
       defaultItem: {
@@ -162,6 +178,7 @@ export default {
         ktp: null,
         jenis_kelamin: null,
         hp: null,
+        email: null,
         alamat: null,
       },
 
@@ -172,6 +189,7 @@ export default {
         { text: 'KTP', value: 'ktp' },
         { text: 'Jenis Kelamin', value: 'jenis_kelamin' },
         { text: 'HP', value: 'hp' },
+        { text: 'Email', value: 'email' },
         { text: 'Alamat', value: 'alamat' },
       ],
     }
@@ -229,7 +247,7 @@ export default {
           })
           vm.submitLoad = false
           this.dialog = false
-          this.$emit("getData")
+          this.$emit('getData')
         })
         .catch((err) => {
           vm.submitLoad = false

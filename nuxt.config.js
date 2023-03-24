@@ -48,7 +48,9 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
+  css: [
+    '@/assets/css/style.scss'
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [],
@@ -62,6 +64,18 @@ export default {
     '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    ['@nuxtjs/laravel-echo', {
+      broadcaster: 'pusher',
+      // authModule: true,
+      // connectOnLogin: true,
+      // disconnectOnLogout: true,
+      wsHost: '127.0.0.1',
+      wsPort: '6001',
+      key: '2c1b8d62111da9e9c97e123',
+      enableTransports: ['ws'],
+      cluster: 'mt1',
+      forceTLS: false
+    }],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -176,7 +190,8 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: true,
+      // dark: true,
+      // light: true,
       themes: {
         dark: {
           primary: colors.blue.darken2,
@@ -187,6 +202,9 @@ export default {
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
         },
+        light: {
+          secondary: '#243238'
+        }
       },
     },
   },
@@ -200,6 +218,6 @@ export default {
   build: {},
 
   server: {
-    port: 3001,
+    port: 3000,
   }
 }

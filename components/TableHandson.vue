@@ -20,34 +20,34 @@ import Handsontable from 'handsontable'
 import 'handsontable/dist/handsontable.full.css'
 
 // Event for `keydown` event. Add condition after delay of 200 ms which is counted from time of last pressed key.
-const debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
-  const vm = window.details
-  // let docEntry = vm.$refs.details.hotInstance.getDataAtCell(row, 28)
-  const filtersPlugin = vm.$refs.details.hotInstance.getPlugin('filters')
-  filtersPlugin.removeConditions(colIndex + 1)
-  filtersPlugin.addCondition(colIndex + 1, 'contains', [event.target.value])
-  filtersPlugin.filter()
-}, 400)
+// const debounceFn = Handsontable.helper.debounce(function (colIndex, event) {
+//   const vm = window.details
+//   // let docEntry = vm.$refs.details.hotInstance.getDataAtCell(row, 28)
+//   const filtersPlugin = vm.$refs.details.hotInstance.getPlugin('filters')
+//   filtersPlugin.removeConditions(colIndex + 1)
+//   filtersPlugin.addCondition(colIndex + 1, 'contains', [event.target.value])
+//   filtersPlugin.filter()
+// }, 400)
 
-const addEventListeners = function (input, colIndex) {
-  input.addEventListener('keydown', function (event) {
-    debounceFn(colIndex, event)
-  })
-}
+// const addEventListeners = function (input, colIndex) {
+//   input.addEventListener('keydown', function (event) {
+//     debounceFn(colIndex, event)
+//   })
+// }
 
 // Build elements which will be displayed in header.
-const getInitializedElements = function (colIndex) {
-  const div = document.createElement('div')
-  const input = document.createElement('input')
+// const getInitializedElements = function (colIndex) {
+//   const div = document.createElement('div')
+//   const input = document.createElement('input')
 
-  div.className = 'filterHeader'
+//   div.className = 'filterHeader'
 
-  addEventListeners(input, colIndex)
+//   addEventListeners(input, colIndex)
 
-  div.appendChild(input)
+//   div.appendChild(input)
 
-  return div
-}
+//   return div
+// }
 
 // Deselect column after click on input.
 const doNotSelectColumn = function (event, coords) {
@@ -93,19 +93,20 @@ export default {
       this.$refs.details.hotInstance.updateSettings({
         // colHeaders: header,
         // columns,
-        nestedHeaders: [
-          [
-            '',
-            'Nama',
-            'NIK',
-            'KTP',
-            { label: 'Tanggal Lahir', colspan: 2 },
-            'Jenis Kelamin',
-            'HP',
-            'Alamat',
-            'Action',
-          ],
-          ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
+        colHeaders: [
+          '',
+          'Nama',
+          'NIK',
+          'KTP',
+          '',
+          'Tanggal Lahir',
+          // { label: 'Tanggal Lahir', colspan: 2 },
+          'Jenis Kelamin',
+          'HP',
+          'Email',
+          'Alamat',
+          '',
+          // ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
         ],
 
         columns: [
@@ -119,6 +120,8 @@ export default {
           {
             data: 'nik',
             type: 'numeric',
+            strict: true,
+            allowInValid: false,
           },
           {
             data: 'ktp',
@@ -150,11 +153,12 @@ export default {
                   col,
                   valueCol,
                 })
-                console.log(button)
+                // console.log(button)
               })
 
               Handsontable.dom.empty(td)
               td.appendChild(button)
+              // console.log(td)
               return td
             },
           },
@@ -183,12 +187,15 @@ export default {
             data: 'hp',
           },
           {
+            data: 'email',
+          },
+          {
             data: 'alamat',
-            beforeKeyDown: false
+            beforeKeyDown: false,
           },
           {
             // data: '',
-            width: 20,
+            width: 35,
             // height: 26,
             wordWrap: false,
             renderer(instance, td, row, col, prop, value, cellProperties) {
@@ -217,13 +224,14 @@ export default {
 
         currentRowClassName: 'currentRow',
         currentColClassName: 'currentCol',
+        className: 'htCenter',
         startRows: 1,
         manualColumnFreeze: true,
         currData: {},
         rowHeaders: true,
         manualColumnResize: true,
         manualRowResize: true,
-        filters: true,
+        // filters: false,
         autoRowSize: false,
         height: '70vh',
         // rowHeights: 50,
@@ -241,42 +249,31 @@ export default {
           indicator: false,
           columns: [0],
         },
-        beforeKeyDown: function(e) {
-            // const reg = /^\d+$/
-            // if (!reg.test(e.key)) {
-            //   e.preventDefault()
-            // }
-        },
-
-        // nestedHeaders: [
-        //   ['', 'Service Name', 'Movement From', 'Movement To', 'Assist', 'Count Assist', {label: 'Start Time', colspan: 2}, {label: 'End Time', colspan: 2}, 'Of Hours', 'Qty', 'Unit', 'GT Vessel', 'Fixed Price', 'Var. Price', 'Amount', 'Currency', 'DocEntry', 'Name'],
-        //   ['A', 'B', 'C', 'D', 'E', '', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q']
-        // ],
 
         beforeOnCellMouseDown: doNotSelectColumn,
-        afterGetColHeader(col, TH) {
-          if (typeof col !== 'number') {
-            return col
-          }
+        // afterGetColHeader(col, TH) {
+        //   if (typeof col !== 'number') {
+        //     return col
+        //   }
 
-          if (col >= 0 && TH.childElementCount < 2) {
-            TH.appendChild(getInitializedElements(col))
-          }
+        //   if (col >= 0 && TH.childElementCount < 2) {
+        //     TH.appendChild(getInitializedElements(col))
+        //   }
 
-          const TR = TH.parentNode
-          const THEAD = TR.parentNode
-          // eslint-disable-next-line no-unused-vars
-          const headerLevel =
-            -1 * THEAD.childNodes.length +
-            Array.prototype.indexOf.call(THEAD.childNodes, TR)
+        //   const TR = TH.parentNode
+        //   const THEAD = TR.parentNode
+        //   // eslint-disable-next-line no-unused-vars
+        //   const headerLevel =
+        //     -1 * THEAD.childNodes.length +
+        //     Array.prototype.indexOf.call(THEAD.childNodes, TR)
 
-          // eslint-disable-next-line no-unused-vars
-          function applyClass(elem, className) {
-            if (!Handsontable.dom.hasClass(elem, className)) {
-              Handsontable.dom.addClass(elem, className)
-            }
-          }
-        },
+        //   // eslint-disable-next-line no-unused-vars
+        //   function applyClass(elem, className) {
+        //     if (!Handsontable.dom.hasClass(elem, className)) {
+        //       Handsontable.dom.addClass(elem, className)
+        //     }
+        //   }
+        // },
         contextMenu: {
           callback(key, options) {
             // eslint-disable-next-line no-unused-vars
@@ -342,3 +339,32 @@ export default {
   },
 }
 </script>
+
+<style>
+.handsontable td {
+  border-top-width: 0;
+  border-left-width: 0;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  height: 22px;
+  empty-cells: show;
+  line-height: 21px;
+  padding: 6px 4px;
+  background-color: #fff;
+  vertical-align: top;
+  overflow: hidden;
+  outline-width: 0;
+  white-space: pre-wrap;
+}
+.handsontable thead th {
+  padding: 8px 4px;
+  font-weight: bold;
+}
+.btn-flatpickr {
+  background-color: #79b3ff;
+  /* width: 90%;
+  height: 90%; */
+  border-radius: 2px;
+  padding: 5px;
+}
+</style>

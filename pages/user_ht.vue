@@ -1,11 +1,13 @@
 <template>
   <v-container>
     <v-row no-gutters align="center" align-content="center" justify="center">
-      <v-col cols="12" md="10" align-self="center">
+      <v-col cols="12" md="12" align-self="center">
         <v-card class="mt-2">
           <v-toolbar flat dense>
-            <v-toolbar-title class="hidden-xs-only">Data Users</v-toolbar-title>
-            <v-divider class="mx-2" inset vertical></v-divider>
+            <v-toolbar-title class="hidden-xs-only"
+              >Data Users Handsontable</v-toolbar-title
+            >
+            <v-divider class="mx-6" inset vertical></v-divider>
             <v-spacer></v-spacer>
             <!-- <v-btn
             icon
@@ -15,11 +17,29 @@
             <v-icon>mdi-plus-circle</v-icon>
           </v-btn> -->
 
-            <v-btn :loading="loading" icon @click="getData">
+            <v-btn
+              text
+              class="my-btn my-btn-add-line grey mx-1 mt-2"
+              color="white"
+              style=""
+              @click="$refs.tableHandson.addLine()"
+            >
+              Add Line
+            </v-btn>
+            <v-btn
+              text
+              class="my-btn light-green mx-1 mt-2"
+              color="white"
+              :loading="submitLoad"
+              @click="save()"
+            >
+              Save
+            </v-btn>
+            <v-btn class="mt-2" :loading="loading" icon @click="getData">
               <v-icon>mdi-refresh</v-icon>
             </v-btn>
           </v-toolbar>
-          <div style="width: 100%; height: 75vh; overflow: hidden">
+          <div class="pa-4" style="width: 100%; height: 75vh; overflow: hidden">
             <LazyTableHandson
               ref="tableHandson"
               @openFlatpickr="openFlatpickr"
@@ -27,36 +47,13 @@
               @removeData="removeData"
             />
 
-            <FlatpickrHandsontable ref="flatpickrHands"
+            <FlatpickrHandsontable
+              ref="flatpickrHands"
               @setDatetimeItem="setDatetimeItem"
             />
 
-            <EditForm ref="editForm"
-              @getData="getData"
-            />
-
+            <EditForm ref="editForm" @getData="getData" />
           </div>
-          <v-card-actions>
-            <v-btn
-              small
-              color="orange darken-1"
-              class="white--text"
-              @click="$refs.tableHandson.addLine()"
-            >
-              Add Line
-            </v-btn>
-            <v-spacer></v-spacer>
-
-            <v-btn
-              color="blue darken-1"
-              dark
-              small
-              :loading="submitLoad"
-              @click="save()"
-            >
-              Save
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -94,10 +91,13 @@ export default {
     this.getData()
   },
   methods: {
-
     setDatetimeItem(data) {
-      console.log('setDatetimeItem')
-      this.$refs.tableHandson.setDatetimeToDetails(data.row, data.cell, data.datetime)
+      // console.log('setDatetimeItem')
+      this.$refs.tableHandson.setDatetimeToDetails(
+        data.row,
+        data.cell,
+        data.datetime
+      )
     },
     openFlatpickr(data) {
       const vm = this
@@ -186,9 +186,4 @@ export default {
 </script>
 
 <style>
-.btn-flatpickr {
-    background-color: #bfcbdb;
-    width: 100%;
-    height: 92%;
-}
 </style>
